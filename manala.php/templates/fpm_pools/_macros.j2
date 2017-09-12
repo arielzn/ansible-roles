@@ -62,3 +62,19 @@
         {{ value }}
     {%- endif -%}
 {%- endmacro -%}
+
+{%- macro config_env(parameters) -%}
+    {%- for parameter in parameters -%}
+        {%- if parameter is mapping -%}
+            {%- for parameter_key, parameter_value in parameter.iteritems() -%}
+                {%- if parameter_key == 'env' -%}
+                    {%- for _, env_variables in parameter.iteritems() -%}
+                        {%- for env_variable in env_variables -%}
+                            env[{{ env_variable.keys()[0] }}] = "{{ env_variable.values()[0] }}"{{ '\n' }}
+                        {%- endfor -%}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro -%}
